@@ -5,15 +5,21 @@ using RestSharp;
 using System.Linq;
 using System.Collections.Generic;
 using static FourEyes.PostcodeAPI.Engine.Constants;
+using FourEyes.PostcodeAPI.Cache;
 
 namespace FourEyes.PostcodeAPI.Engine
 {
     public class EngineFacade : IEngine
     {
+        ICache APIEngineCache { get; }
         string SupplierResourceName { get; }
 
         public EngineFacade()
         {
+            APIEngineCache = new CacheFacade();
+            (APIEngineCache as CacheFacade).SinglePostcodeServiceCallback = SinglePostcodeInformation;
+            (APIEngineCache as CacheFacade).MultiPostcodeServiceCallback = MultiPostcodeInformation;
+
             SupplierResourceName = "postcodes";
         }
 
@@ -31,9 +37,21 @@ namespace FourEyes.PostcodeAPI.Engine
 
         public IResponse GetSinglePostcodeInformation(string postcode, string supplierBaseUrl)
         {
+            IResponse response = APIEngineCache.CacheSinglePostcodeRequest(postcode, supplierBaseUrl);
+            return response;
+        }
+
+        public IResponse GetMultiPostcodesInformation(string postcodes, string supplierBaseUrl)
+        {
+            IResponse response = APIEngineCache.CacheMultiPostcodeRequest(postcodes, supplierBaseUrl);
+            return response;
+        }
+
+        private IResponse SinglePostcodeInformation(string postcode, string supplierBaseUrl)
+        {
             IResponse response = null;
 
-            RestClient client = GetRestClient(supplierBaseUrl + SupplierResourceName + @"/" + postcode);
+            RestClient client = GetRestClient(supplierBaseUrl + SupplierResourceName + @"/" + postcode?.Trim());
             RestRequest request = new RestRequest();
             request.Method = Method.GET;
 
@@ -51,7 +69,8 @@ namespace FourEyes.PostcodeAPI.Engine
             return response;
         }
 
-        public IResponse GetMultiPostcodesInformation(string postcodes, string supplierBaseUrl)
+        
+        private IResponse MultiPostcodeInformation(string postcodes, string supplierBaseUrl)
         {
             IResponse response = null;
 
@@ -60,7 +79,7 @@ namespace FourEyes.PostcodeAPI.Engine
             request.Method = Method.POST;
 
             SupplierBulkRequest supplierRequest = new SupplierBulkRequest();
-            supplierRequest.postcodes = string.IsNullOrWhiteSpace(postcodes) ? null : postcodes.Split(",").Select(s => s.Trim()).ToArray();
+            supplierRequest.postcodes = postcodes?.Split(",").Select(s => s.Trim()).ToArray();
 
             request.AddJsonBody(supplierRequest);
 

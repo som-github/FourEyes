@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LazyCache" Version="2.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FourEyes.PostcodeAPI.Interfaces\FourEyes.PostcodeAPI.Interfaces.csproj" />
   </ItemGroup>
 

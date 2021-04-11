@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FourEyes.PostcodeAPI.Interfaces
+﻿namespace FourEyes.PostcodeAPI.Interfaces
 {
     public interface ICache
     {
+        IResponse CacheSinglePostcodeRequest(string postcode, string supplierBaseUrl);
+
+        IResponse CacheMultiPostcodeRequest(string postcodes, string supplierBaseUrl);
     }
 }

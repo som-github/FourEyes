@@ -8,4 +8,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FourEyes.PostcodeAPI.Engine\FourEyes.PostcodeAPI.Engine.csproj" />
+    <ProjectReference Include="..\FourEyes.PostcodeAPI.Interfaces\FourEyes.PostcodeAPI.Interfaces.csproj" />
+  </ItemGroup>
+
 </Project>

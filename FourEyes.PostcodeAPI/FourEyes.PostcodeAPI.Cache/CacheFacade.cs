@@ -4,6 +4,12 @@ using System;
 
 namespace FourEyes.PostcodeAPI.Cache
 {
+    /**********************************************************************
+     * This caching class provides the Caching for API via its Engine. It
+     * wraps the Caching Mechanism and that makes it a scalable component 
+     * if we changes the Caching Technology or Mechanism without impacting
+     * the Application. This component is plugable via the ICache interface.
+     **********************************************************************/
     public class CacheFacade : ICache
     {
         private IAppCache Cache { get; }

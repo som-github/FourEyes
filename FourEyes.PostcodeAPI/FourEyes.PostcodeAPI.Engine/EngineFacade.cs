@@ -9,6 +9,15 @@ using FourEyes.PostcodeAPI.Cache;
 
 namespace FourEyes.PostcodeAPI.Engine
 {
+    /*******************************************************************************
+     * This is the Engine component for the API. This segregates the application
+     * algorithm from the Service Technology. It is a plugable component via IEngine
+     * Interface. Since it is easily plugable, API versioning becomes easy when 
+     * version changes. 
+     * 
+     * It also provides an easy adaptability for future Technological Migration as
+     * long as the new technology is .Net compatible.
+     *******************************************************************************/
     public class EngineFacade : IEngine
     {
         ICache APIEngineCache { get; }

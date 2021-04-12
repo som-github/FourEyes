@@ -10,23 +10,36 @@ namespace FourEyes.PostcodeAPI.Controllers
     {
         IConfiguration Configuration { get; }
 
-        public PostcodeInfoController(IConfiguration configuration)
+        IEngine APIEngine { get; }
+
+        public PostcodeInfoController(IConfiguration configuration, IEngine engine)
         {
             Configuration = configuration;
+            APIEngine = engine;
         }
 
+        /// <summary>
+        /// This GET API takes the postcode as input to provide the geo-coordinate details of the Location
+        /// </summary>
+        /// <param name="postcode">Postcode to fetch the details for e.g. EX1 1NT or RM82GF</param>
+        /// <returns>Coordinate details object</returns>
         [HttpGet]
         [Microsoft.AspNetCore.Mvc.Route("postcode-info/v1/get-single-postcode-info")]
-        public IResponse GetSinglePostcodeInfo([FromServices] IEngine engine, string postcode)
+        public IResponse GetSinglePostcodeInfo(string postcode)
         {
-            return engine.GetSinglePostcodeInformation(postcode, Configuration[Constants.POSTCODE_IO_BASE_URL]);
+            return APIEngine.GetSinglePostcodeInformation(postcode, Configuration[Constants.POSTCODE_IO_BASE_URL]);
         }
 
+        /// <summary>
+        /// This GET API takes the comma separated postcodes list to provide the geo-coordinate details of all input postcodes
+        /// </summary>
+        /// <param name="postcodes">Comma separated postcodes for which details are needed e.g. EX1 1NT, RM82GF</param>
+        /// <returns>The list of Object for coordinates details</returns>
         [HttpGet]
         [Microsoft.AspNetCore.Mvc.Route("postcode-info/v1/get-multi-postcodes-info")]
-        public IResponse GetMultiPostcodesInformation([FromServices] IEngine engine, string postcodes)
+        public IResponse GetMultiPostcodesInformation(string postcodes)
         {
-            return engine.GetMultiPostcodesInformation(postcodes, Configuration[Constants.POSTCODE_IO_BASE_URL]);
+            return APIEngine.GetMultiPostcodesInformation(postcodes, Configuration[Constants.POSTCODE_IO_BASE_URL]);
         }
     }
 }
